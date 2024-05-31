@@ -18,13 +18,17 @@ const useTimer = (
   useEffect(() => {
     resetTimer();
     return () => clearInterval(intervalRef.current);
-  }, [mode, initialTime]);
+  }, [mode, initialTime, workTimeInput, restTimeInput]);
 
   const startTimer = () => {
     if (intervalRef.current !== null) return;
 
     setIsCounting(true);
-    intervalRef.current = setInterval(updateTime, 1000);
+    if (mode !== "stopwatch") {
+      intervalRef.current = setInterval(updateTime, 1000);
+    } else {
+      intervalRef.current = setInterval(updateTime, 100);
+    }
   };
 
   const stopTimer = () => {
@@ -52,7 +56,7 @@ const useTimer = (
       } else if (mode === "interval") {
         return handleInterval(prevTime);
       } else {
-        return prevTime + 1;
+        return prevTime + 0.1; // Increment by 0.1 for milliseconds
       }
     });
   };

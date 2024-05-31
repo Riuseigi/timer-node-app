@@ -29,15 +29,23 @@ function Timer() {
   } = useTimer("countdown", initialTime, workTimeInput, restTimeInput);
 
   const formatTime = (timeInSeconds, mode) => {
+    const totalMilliseconds = Math.floor(timeInSeconds * 1000);
+    const minutes = Math.floor((totalMilliseconds % 3600000) / 60000);
+    const seconds = Math.floor((totalMilliseconds % 60000) / 1000);
+    const milliseconds = totalMilliseconds % 1000;
+
+    const formattedMilliseconds = (totalMilliseconds % 1000)
+      .toString()
+      .slice(0, 2)
+      .padStart(2, "0");
+
     if (mode === "stopwatch") {
-      const minutes = Math.floor((timeInSeconds % 3600) / 60);
-      const seconds = timeInSeconds % 60;
-      return `${hours.toString().padStart(2, "0")}:${minutes
+      return `${minutes.toString().padStart(2, "0")}:${seconds
         .toString()
-        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+        .padStart(2, "0")}:${formattedMilliseconds
+        .toString()
+        .padStart(2, "0")}`;
     } else {
-      const minutes = Math.floor(timeInSeconds / 60);
-      const seconds = timeInSeconds % 60;
       return `${minutes.toString().padStart(2, "0")}:${seconds
         .toString()
         .padStart(2, "0")}`;
@@ -95,7 +103,7 @@ function Timer() {
             style={circleStyle}
           />
         </svg>
-        <div className="timer-text">{formatTime(time)}</div>
+        <div className="timer-text">{formatTime(time, mode)}</div>
       </div>
       <div>
         <form>
