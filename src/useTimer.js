@@ -62,7 +62,7 @@ const useTimer = (
   };
 
   const handleCountdown = (prevTime) => {
-    if (prevTime <= 1) {
+    if (prevTime <= 0) {
       stopTimer();
       setTime(Number(initialTime));
       return 0;
@@ -71,7 +71,7 @@ const useTimer = (
   };
 
   const handleInterval = (prevTime) => {
-    if (prevTime <= 1) {
+    if (prevTime <= 0) {
       if (intervalPhase === "work") {
         setIntervalPhase("rest");
         return restTime;
