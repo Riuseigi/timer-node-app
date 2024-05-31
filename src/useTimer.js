@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+
 const useTimer = (
   initialMode = "countdown",
   initialTime,
@@ -37,7 +38,7 @@ const useTimer = (
     if (mode === "countdown") {
       setTime(Number(initialTime));
     } else if (mode === "interval") {
-      setTime(workTime);
+      setTime(workTimeInput);
       setIntervalPhase("work");
     } else {
       setTime(0);
@@ -86,11 +87,9 @@ const useTimer = (
     startTimer,
     stopTimer,
     resetTimer,
-    workTime,
-    setWorkTime,
-    restTime,
-    setRestTime,
     intervalPhase,
+    setRestTime,
+    setWorkTime,
   };
 };
 
