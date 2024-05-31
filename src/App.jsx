@@ -11,7 +11,7 @@ function App() {
 }
 
 function Timer() {
-  const [initialTime, setInitialTime] = useState(0);
+  const [initialTime, setInitialTime] = useState(60);
   const [timeInput, setTimeInput] = useState(0);
   const [workTimeInput, setWorkTimeInput] = useState(1800);
   const [restTimeInput, setRestTimeInput] = useState(300);
@@ -23,33 +23,56 @@ function Timer() {
     startTimer,
     stopTimer,
     resetTimer,
-
     intervalPhase,
+    setRestTime,
+    setWorkTime,
   } = useTimer("countdown", initialTime, workTimeInput, restTimeInput);
 
-  const formatTime = (timeInSeconds) => {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = timeInSeconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${seconds
-      .toString()
-      .padStart(2, "0")}`;
+  const formatTime = (timeInSeconds, mode) => {
+    if (mode === "stopwatch") {
+      const minutes = Math.floor((timeInSeconds % 3600) / 60);
+      const seconds = timeInSeconds % 60;
+      return `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    } else {
+      const minutes = Math.floor(timeInSeconds / 60);
+      const seconds = timeInSeconds % 60;
+      return `${minutes.toString().padStart(2, "0")}:${seconds
+        .toString()
+        .padStart(2, "0")}`;
+    }
   };
-
   const getCircleStyle = (time, initialTime) => {
     const radius = 54;
     const circumference = 2 * Math.PI * radius;
-    const offset =
-      initialTime > 0
-        ? circumference - (time / initialTime) * circumference
-        : circumference;
+    let offset;
+
+    if (mode === "countdown" && initialTime > 0) {
+      offset = circumference - (time / initialTime) * circumference;
+    } else if (mode === "interval") {
+      const currentInitialTime =
+        intervalPhase === "work" ? workTimeInput : restTimeInput;
+      offset = circumference - (time / currentInitialTime) * circumference;
+    } else {
+      offset = circumference;
+    }
+
     return {
       strokeDasharray: `${circumference} ${circumference}`,
       strokeDashoffset: offset,
     };
   };
 
-  function handlerSetTime() {
-    setInitialTime(Number(timeInput));
+  function handlerSetTime(e) {
+    e.preventDefault();
+    if (mode === "countdown") {
+      setInitialTime(Number(timeInput));
+    } else if (mode === "interval") {
+      setWorkTime(Number(workTimeInput));
+      setRestTime(Number(restTimeInput));
+    }
+    resetTimer(); // Ensure timer resets to reflect the new initial time
   }
 
   const circleStyle = getCircleStyle(time, initialTime);
@@ -75,24 +98,27 @@ function Timer() {
         <div className="timer-text">{formatTime(time)}</div>
       </div>
       <div>
-        {mode !== "stopwatch" && (
-          <>
-            <input
-              placeholder="Set Time"
-              onChange={(e) =>
-                mode === "countdown"
-                  ? setTimeInput(Number(e.target.value))
-                  : setWorkTimeInput(Number(e.target.value))
-              }
-            />
-            {mode === "interval" && (
+        <form>
+          {mode !== "stopwatch" && (
+            <>
               <input
-                onChange={(e) => setRestTimeInput(Number(e.target.value))}
+                placeholder="Set Time"
+                onChange={(e) =>
+                  mode === "countdown"
+                    ? setTimeInput(Number(e.target.value))
+                    : setWorkTimeInput(Number(e.target.value))
+                }
               />
-            )}
-            <button onClick={handlerSetTime}>Submit</button>
-          </>
-        )}
+              {mode === "interval" && (
+                <input
+                  placeholder="Set Rest Time"
+                  onChange={(e) => setRestTimeInput(Number(e.target.value))}
+                />
+              )}
+              <button onClick={(e) => handlerSetTime(e)}>Submit</button>
+            </>
+          )}
+        </form>
       </div>
       <div>
         <button onClick={() => setMode("countdown")}>Count Down</button>
