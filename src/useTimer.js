@@ -74,9 +74,12 @@ const useTimer = (
     if (prevTime <= 0) {
       if (intervalPhase === "work") {
         setIntervalPhase("rest");
+        stopTimer();
         return restTime;
       } else {
         setIntervalPhase("work");
+        stopTimer();
+        setTime(workTimeInput);
         return workTime;
       }
     }
