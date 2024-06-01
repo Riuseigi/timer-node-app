@@ -18,17 +18,22 @@ const useTimer = (
   useEffect(() => {
     resetTimer();
     return () => clearInterval(intervalRef.current);
-  }, [mode, initialTime, workTimeInput, restTimeInput]);
+  }, [mode, initialTime]);
+
+  useEffect(() => {
+    if (mode === "interval" && time < 0) {
+      switchIntervalPhase();
+    }
+  }, [time, intervalPhase, mode, restTime, workTime]);
 
   const startTimer = () => {
     if (intervalRef.current !== null) return;
 
     setIsCounting(true);
-    if (mode !== "stopwatch") {
-      intervalRef.current = setInterval(updateTime, 1000);
-    } else {
-      intervalRef.current = setInterval(updateTime, 100);
-    }
+    intervalRef.current = setInterval(
+      updateTime,
+      mode === "stopwatch" ? 100 : 1000
+    );
   };
 
   const stopTimer = () => {
@@ -72,18 +77,19 @@ const useTimer = (
 
   const handleInterval = (prevTime) => {
     if (prevTime <= 0) {
-      if (intervalPhase === "work") {
-        setIntervalPhase("rest");
-        stopTimer();
-        return restTime;
-      } else {
-        setIntervalPhase("work");
-        stopTimer();
-        setTime(workTimeInput);
-        return workTime;
-      }
+      return prevTime - 1; // Allows reaching zero
     }
     return prevTime - 1;
+  };
+
+  const switchIntervalPhase = () => {
+    if (intervalPhase === "work") {
+      setIntervalPhase("rest");
+      setTime(restTime);
+    } else {
+      setIntervalPhase("work");
+      setTime(workTime);
+    }
   };
 
   return {
