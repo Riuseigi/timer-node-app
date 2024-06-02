@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 import "./App.css";
 import useTimer from "./useTimer";
 
@@ -13,8 +13,8 @@ function App() {
 function Timer() {
   const [initialTime, setInitialTime] = useState(60);
   const [timeInput, setTimeInput] = useState(0);
-  const [workTimeInput, setWorkTimeInput] = useState(1800);
-  const [restTimeInput, setRestTimeInput] = useState(300);
+  const [workTimeInput, setWorkTimeInput] = useState(30 * 60);
+  const [restTimeInput, setRestTimeInput] = useState(5 * 60);
   const {
     mode,
     setMode,
@@ -32,7 +32,6 @@ function Timer() {
     const totalMilliseconds = Math.floor(timeInSeconds * 1000);
     const minutes = Math.floor((totalMilliseconds % 3600000) / 60000);
     const seconds = Math.floor((totalMilliseconds % 60000) / 1000);
-    const milliseconds = totalMilliseconds % 1000;
 
     const formattedMilliseconds = (totalMilliseconds % 1000)
       .toString()
@@ -125,14 +124,16 @@ function Timer() {
                 onChange={(e) =>
                   mode === "countdown"
                     ? setTimeInput(Number(e.target.value))
-                    : setWorkTimeInput(Number(e.target.value))
+                    : setWorkTimeInput(Number(e.target.value) * 60)
                 }
               />
               {mode === "interval" && (
                 <input
                   placeholder="Set Rest Time"
                   type="number"
-                  onChange={(e) => setRestTimeInput(Number(e.target.value))}
+                  onChange={(e) =>
+                    setRestTimeInput(Number(e.target.value) * 60)
+                  }
                 />
               )}
               <button onClick={(e) => handlerSetTime(e)}>Submit</button>
