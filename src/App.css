@@ -1,15 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+:root {
+  --color-background: #cdc8b0; /* Dominant background color */
+  --color-background-light: #dad4bb; /* Light background color */
+  --color-text: #444133; /* Text color */
+  --color-border: #cec9b1; /* Border color */
+  --color-accent: #d9d3ba; /* Accent color */
+  --color-highlight: #ccc7af; /* Highlight color */
+  --font-family: "Roboto", sans-serif; /* Font family */
+}
+
 body {
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f0f0;
+  background-image: url(https://i.imgur.com/HhiNn0J.png);
+  background-attachment: fixed;
+  background-size: cover;
+  color: var(--color-text);
   margin: 0;
+  font-family: var(--font-family);
 }
-
+h1 {
+  font-size: 2rem;
+}
 .timer-container {
   text-align: center;
+}
+p {
+  margin: 10px;
+  background-color: var(--color-highlight);
+  border: 1px solid var(--color-accent);
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-text);
 }
 
 .circle-timer {
@@ -34,4 +61,40 @@ body {
   transform: translate(-50%, -50%);
   font-size: 1.5em;
   font-weight: bold;
+}
+
+.timer-text span {
+  font-size: 0.5em;
+}
+.mode-buttons button {
+  font-size: 1.2rem;
+}
+
+button {
+  padding: 10px 20px;
+  display: inline-block;
+  margin-right: 10px;
+  background-color: var(--color-text);
+  border: 1px solid var(--color-accent);
+  border-radius: 5px;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+.timer-form {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.timer-form input {
+  padding: 10px;
+  border: 1px solid var(--color-accent);
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+  max-width: 150px;
 }

@@ -88,8 +88,17 @@ function Timer() {
   return (
     <div className="timer-container">
       <h1>Simple Timer App</h1>
-      <p>Mode: {mode[0].toUpperCase() + mode.slice(1)}</p>
-      {mode === "interval" && <p>{intervalPhase.toUpperCase()}</p>}
+      <div className="mode-buttons">
+        <button onClick={() => setMode("countdown")}>Count Down</button>
+        <button onClick={() => setMode("stopwatch")}>Stopwatch</button>
+        <button onClick={() => setMode("interval")}>Interval</button>
+      </div>
+      <p className="timer-mode">
+        Mode: {mode[0].toUpperCase() + mode.slice(1)}
+      </p>
+      {mode === "interval" && (
+        <p className="interval-phase">{intervalPhase.toUpperCase()}</p>
+      )}
       <div className="circle-timer">
         <svg className="timer-svg" width="120" height="120">
           <circle
@@ -105,12 +114,14 @@ function Timer() {
         </svg>
         <div className="timer-text">{formatTime(time, mode)}</div>
       </div>
+
       <div>
-        <form>
+        <form className="timer-form">
           {mode !== "stopwatch" && (
             <>
               <input
                 placeholder="Set Time"
+                type="number"
                 onChange={(e) =>
                   mode === "countdown"
                     ? setTimeInput(Number(e.target.value))
@@ -120,6 +131,7 @@ function Timer() {
               {mode === "interval" && (
                 <input
                   placeholder="Set Rest Time"
+                  type="number"
                   onChange={(e) => setRestTimeInput(Number(e.target.value))}
                 />
               )}
@@ -128,11 +140,7 @@ function Timer() {
           )}
         </form>
       </div>
-      <div>
-        <button onClick={() => setMode("countdown")}>Count Down</button>
-        <button onClick={() => setMode("stopwatch")}>Stopwatch</button>
-        <button onClick={() => setMode("interval")}>Interval</button>
-      </div>
+
       <div>
         <button onClick={isCounting ? stopTimer : startTimer}>
           {isCounting ? `Stop` : `Start`}
